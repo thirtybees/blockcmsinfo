@@ -281,7 +281,7 @@ class Blockcmsinfo extends Module
                 foreach ($shopIds as $idShop) {
                     $info->id_shop = $idShop;
                     try {
-                        $saved &= $info->add();
+                        $saved &= $info->save();
                     } catch (Exception $e) {
                         $saved = false;
                         $this->html .= $this->displayError($e->getMessage());
@@ -290,7 +290,7 @@ class Blockcmsinfo extends Module
             }
         } else {
             try {
-                $saved = $info->add();
+                $saved = $info->save();
             } catch (Exception $e) {
                 $saved = false;
                 $this->html .= $this->displayError($e->getMessage());
