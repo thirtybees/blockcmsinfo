@@ -57,7 +57,6 @@ class Blockcmsinfo extends Module
 
         $this->displayName = $this->l('Custom CMS information block');
         $this->description = $this->l('Adds custom information blocks in your store.');
-        $this->ps_versions_compliancy = ['min' => '1.6', 'max' => '1.6.99.99'];
     }
 
     /**
