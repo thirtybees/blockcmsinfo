@@ -27,7 +27,7 @@ if (!defined('_TB_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'blockcmsinfo/classes/InfoBlock.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 /**
  * Class Blockcmsinfo
@@ -48,7 +48,7 @@ class Blockcmsinfo extends Module
     {
         $this->name = 'blockcmsinfo';
         $this->tab = 'front_office_features';
-        $this->version = '2.0.1';
+        $this->version = '2.0.2';
         $this->author = 'thirty bees';
         $this->bootstrap = true;
         $this->need_instance = 0;
@@ -73,35 +73,7 @@ class Blockcmsinfo extends Module
             $this->disableDevice(Context::DEVICE_TABLET | Context::DEVICE_MOBILE);
     }
 
-    /**
-     * Install the database tables for this module
-     *
-     * @return bool
-     */
-    public function installDB()
-    {
-        $return = true;
-        $return &= Db::getInstance()->execute(
-            '
-				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'info` (
-				  `id_info` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-				  `id_shop` INT(11) UNSIGNED DEFAULT NULL,
-				  PRIMARY KEY (`id_info`)
-			    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci'
-        );
 
-        $return &= Db::getInstance()->execute(
-            '
-				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'info_lang` (
-				  `id_info` INT(11) UNSIGNED NOT NULL,
-				  `id_lang` INT(11) UNSIGNED NOT NULL ,
-				  `text` TEXT NOT NULL,
-				  PRIMARY KEY (`id_info`, `id_lang`)
-			    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;'
-        );
-
-        return $return;
-    }
 
     /**
      * Install fixtures
@@ -110,35 +82,7 @@ class Blockcmsinfo extends Module
      */
     public function installFixtures()
     {
-        $tabTexts = [
-            [
-                'text' => '<ul>
-<li><em class="icon-truck" id="icon-truck"></em>
-<div class="type-text">
-<h3>Lorem Ipsum</h3>
-<p>Lorem ipsum dolor sit amet conse ctetur voluptate velit esse cillum dolore eu</p>
-</div>
-</li>
-<li><em class="icon-phone" id="icon-phone"></em>
-<div class="type-text">
-<h3>Dolor Sit Amet</h3>
-<p>Lorem ipsum dolor sit amet conse ctetur voluptate velit esse cillum dolore eu</p>
-</div>
-</li>
-<li><em class="icon-credit-card" id="icon-credit-card"></em>
-<div class="type-text">
-<h3>Ctetur Voluptate</h3>
-<p>Lorem ipsum dolor sit amet conse ctetur voluptate velit esse cillum dolore eu</p>
-</div>
-</li>
-</ul>',
-            ],
-            [
-                'text' => '<h3>Custom Block</h3>
-<p><strong class="dark">Lorem ipsum dolor sit amet conse ctetu</strong></p>
-<p>Sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</p>',
-            ],
-        ];
+        $tabTexts = json_decode(file_get_contents(__DIR__.'/data/fixtures.json'), true);
 
         $shopsIds = Shop::getShops(true, null, true);
         $return = true;
@@ -175,12 +119,11 @@ class Blockcmsinfo extends Module
      */
     public function uninstallDB($dropTable = true)
     {
-        $ret = true;
         if ($dropTable) {
-            $ret &= Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'info`') && Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'info_lang`');
+            return $this->execDbQueries('uninstall');
         }
 
-        return $ret;
+        return true;
     }
 
     /**
@@ -335,6 +278,35 @@ class Blockcmsinfo extends Module
                 ->where('`id_lang` = '.(int) $idLang)
                 ->where('`id_shop` = '.(int) $idShop)
         );
+    }
+
+    /**
+     * Install the database tables for this module
+     *
+     * @return bool
+     */
+    protected function installDB()
+    {
+        return $this->execDbQueries('install');
+    }
+
+    protected function execDbQueries($file = 'install')
+    {
+        if (!file_exists(__DIR__."/sql/$file.sql")) {
+            return false;
+        } elseif (!$sql = file_get_contents(__DIR__."/sql/$file.sql")) {
+            return false;
+        }
+        $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
+        $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
+
+        foreach ($sql as $query) {
+            if (!Db::getInstance()->execute(trim($query))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
