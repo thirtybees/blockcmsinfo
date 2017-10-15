@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_info` (
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'info_lang` (
+CREATE TABLE IF NOT EXISTS `PREFIX_info_lang` (
   `id_info` INT(11) UNSIGNED NOT NULL,
   `id_lang` INT(11) UNSIGNED NOT NULL,
   `text`    TEXT             NOT NULL,
