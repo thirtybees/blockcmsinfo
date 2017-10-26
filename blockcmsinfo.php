@@ -27,7 +27,7 @@ if (!defined('_TB_VERSION_')) {
     exit;
 }
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/classes/InfoBlock.php';
 
 /**
  * Class Blockcmsinfo
@@ -48,7 +48,7 @@ class Blockcmsinfo extends Module
     {
         $this->name = 'blockcmsinfo';
         $this->tab = 'front_office_features';
-        $this->version = '2.0.3';
+        $this->version = '2.0.4';
         $this->author = 'thirty bees';
         $this->bootstrap = true;
         $this->need_instance = 0;
