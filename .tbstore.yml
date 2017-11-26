@@ -1,0 +1,14 @@
+module_name: Block CMS Info
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - cms pages
+  - cms
+  - cms links
+short_description: The block CMS Info module allows you to add custom text to areas of your site
+description: description.md
+images:
+  - image-1.png
+  - image-2.png
+license: MIT
