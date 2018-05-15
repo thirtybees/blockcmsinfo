@@ -55,7 +55,7 @@ class Blockcmsinfo extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Custom CMS information block');
+        $this->displayName = $this->l('Block CMS Info');
         $this->description = $this->l('Adds custom information blocks in your store.');
     }
 
