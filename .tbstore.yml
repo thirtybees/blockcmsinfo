@@ -10,4 +10,5 @@ description_short: The block CMS Info module allows you to add custom text to ar
 description: description.md
 images:
   - image-1.png
+gdpr_compliant: true
 license: MIT
