@@ -57,6 +57,7 @@ class Blockcmsinfo extends Module
 
         $this->displayName = $this->l('Block CMS Info');
         $this->description = $this->l('Adds custom information blocks in your store.');
+        $this->tb_versions_compliancy = '> 1.0.0';
     }
 
     /**
