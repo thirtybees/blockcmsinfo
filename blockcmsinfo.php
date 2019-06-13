@@ -71,8 +71,7 @@ class Blockcmsinfo extends Module
         return parent::install() &&
             $this->installDB() &&
             $this->registerHook('home') &&
-            $this->installFixtures() &&
-            $this->disableDevice(Context::DEVICE_TABLET | Context::DEVICE_MOBILE);
+            $this->installFixtures();
     }
 
 
