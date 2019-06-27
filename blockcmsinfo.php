@@ -48,7 +48,7 @@ class Blockcmsinfo extends Module
     {
         $this->name = 'blockcmsinfo';
         $this->tab = 'front_office_features';
-        $this->version = '2.0.6';
+        $this->version = '2.0.7';
         $this->author = 'thirty bees';
         $this->bootstrap = true;
         $this->need_instance = 0;
